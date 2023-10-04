@@ -101,6 +101,8 @@ paths:
                 $ref: '#/components/schemas/BookingsUser'
         "409":
           description: an existing item already exists
+        "400":
+          description: bad input parameter
 components:
   schemas:
     AllBookings:
