@@ -14,7 +14,7 @@
         },
         {
             "title": "The Night Before",
-            "rating": 7.4,
+            "rating": 8.1,
             "director": "Jonathan Levine",
             "id": "96798c08-d19b-4986-a05d-7da856efb697"
         },
@@ -41,6 +41,6 @@
             "rating": 7.1,
             "director": "Sam Mendes",
             "id": "39ab85e5-5e8e-4dc5-afea-65dc368bd7ab"
-        },
+        }
     ]
 }
