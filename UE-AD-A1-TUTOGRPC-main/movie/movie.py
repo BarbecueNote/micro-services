@@ -16,7 +16,7 @@ class MovieServicer(movie_pb2_grpc.MovieServicer):
                 print("Movie found!")
                 return movie_pb2.MovieData(title=movie['title'], rating=movie['rating'],
                                             director=movie['director'], id=movie['id'])
-        return movie_pb2.MovieData(title="", rating="", director="", id="")
+        return movie_pb2.MovieData(title="", rating=0, director="", id="")
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
