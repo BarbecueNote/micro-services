@@ -4,6 +4,7 @@ import movie_pb2
 import movie_pb2_grpc
 import json
 
+
 class MovieServicer(movie_pb2_grpc.MovieServicer):
 
     def __init__(self):
@@ -15,8 +16,13 @@ class MovieServicer(movie_pb2_grpc.MovieServicer):
             if movie['id'] == request.id:
                 print("Movie found!")
                 return movie_pb2.MovieData(title=movie['title'], rating=movie['rating'],
-                                            director=movie['director'], id=movie['id'])
+                                           director=movie['director'], id=movie['id'])
         return movie_pb2.MovieData(title="", rating=0, director="", id="")
+
+    def GetListMovies(self, request, context):
+        for movie in self.db:
+            yield movie_pb2.MovieData(title=movie['title'], rating=movie['rating'], director=movie['director'], id=movie['id'])
+
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
