@@ -2,6 +2,8 @@ import grpc
 from concurrent import futures
 import booking_pb2
 import booking_pb2_grpc
+import showtime_pb2
+import showtime_pb2_grpc
 import json
 
 class BookingServicer(booking_pb2_grpc.BookingServicer):
@@ -44,6 +46,7 @@ class BookingServicer(booking_pb2_grpc.BookingServicer):
                         date['movies'] = date['movies'] + rmovie
                         with open("{}/data/bookings.json".format("."), "w") as json_file:
                             json.dump(db, json_file, indent=3)
+
                 if created==False:
                     addedbooking = {"date": request.dates,
                                     "movies": rmovie
@@ -86,6 +89,27 @@ def serve():
     server.start()
     server.wait_for_termination()
 
+def get_movie_by_time(stub,time):
+    movies = stub.GetMovieByTime(showtime_pb2.Timestamp(time=time))
+    for movie in movies:
+        print(movie)
+
+def showtimes(stub):
+    movies = stub.Showtimes(showtime_pb2.Empty())
+    for movie in movies:
+        print(movie)
+
+def run():
+    with grpc.insecure_channel('localhost:3002') as channel:
+        stub = showtime_pb2_grpc.ShowtimeStub(channel)
+
+        print("-------------- GetMovieByTime --------------")
+        time = "20151201"
+        get_movie_by_time(stub, time)
+        print ("*******************************************")
+        showtimes(stub)
+
 
 if __name__ == '__main__':
-    serve()
+    #serve()
+    run()
