@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify, make_response
 import json
-
+import requests
+from urllib.parse import quote
 
 import sys
 from werkzeug.exceptions import NotFound
@@ -13,6 +14,10 @@ HOST = '0.0.0.0'
 with open('{}/databases/movies.json'.format("."), "r") as jsf:
    movies = json.load(jsf)["movies"]
 
+
+#TMDB API not IMDB
+API_KEY = '1f1144d7bdc5b16a570873719d398fee'
+   
 # root message
 @app.route("/", methods=['GET'])
 def home():
@@ -34,7 +39,12 @@ def get_movie_byid(movieid):
         if str(movie["id"]) == str(movieid):
             res = make_response(jsonify(movie),200)
             return res
-    return make_response(jsonify({"error":"Movie ID not found"}),400)
+    URL = f"https://api.themoviedb.org/3/movie/{movieid}?api_key={API_KEY}"
+    response = requests.get(URL)
+    if response.status_code != 200:
+        return make_response(jsonify({"error": "Movie not found"}), 404)
+    movie = response.json()
+    return make_response(jsonify(movie),200)
 
 @app.route("/movies/<movieid>", methods=['POST'])
 def create_movie(movieid):
@@ -51,18 +61,24 @@ def create_movie(movieid):
 
 @app.route("/moviebytitle", methods=['GET'])
 def get_movie_bytitle():
-    json = ""
-    if request.args:
-        req = request.args
-        for movie in movies:
-            if str(movie["title"]) == str(req["title"]):
-                json = movie
+    title = request.args.get("title")
+    if not title:
+        return make_response(jsonify({"error": "Title parameter is required"}), 400)
+    encoded_title = quote(title)
+    for movie in movies:
+        if movie["title"].lower() == title.lower():
+            return make_response(jsonify(movie), 200)
 
-    if not json:
-        res = make_response(jsonify({"error":"movie title not found"}),400)
+    # check tmdb if info doesn't exist locally (IMDB's free plan is off since June) 
+    URL = f"https://api.themoviedb.org/3/search/movie?api_key={API_KEY}&query={encoded_title}"
+    response = requests.get(URL)
+    search_results = response.json().get("results", [])
+
+    if search_results:
+        return make_response(jsonify(search_results[0]), 200)
     else:
-        res = make_response(jsonify(json),200)
-    return res
+        return make_response(jsonify({"error": "Movie not found"}), 404)
+
 
 @app.route("/movies/<movieid>/modifyrate/<rate>", methods=['PUT'])
 def update_movie_rating(movieid, rate):
