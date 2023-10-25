@@ -10,6 +10,7 @@ class BookingServicer(booking_pb2_grpc.BookingServicer):
         with open('{}/data/bookings.json'.format("."), "r") as jsf:
             self.db = json.load(jsf)["bookings"]
 
+
     def GetListBookings(self, request, context):
         for booking in self.db:
             for date in booking['dates']:
@@ -25,45 +26,63 @@ class BookingServicer(booking_pb2_grpc.BookingServicer):
         return booking_pb2.BookingData(userId ="" , dates="", moviesId="")
 
     def AddBooking(self, request, context):
+        with open('{}/data/bookings.json'.format("."), "r") as jsf:
+            db = json.load(jsf)
         created=False
-        movie = request.movie
-        for booking in self.db:
-            if booking['userid'] == request.id:
+        rmovie = list(request.moviesId)
+        for booking in db['bookings']:
+            if booking['userid'] == request.userId:
                 for date in booking['dates']:
-                    if date['date'] == request.date:
+                    print("ooo")
+                    for movie in date['movies']:
+                        print("iii")
+                        if [movie] == rmovie:
+                            created = True
+                            print("booking already exists")
+                    if date['date'] == request.dates and created==False:
                         created=True
-                        date['movies'].append(movie)
-                        self.db=
-                    yield booking_pb2.BookingData(userId =booking['userid'] , dates=date['date'], moviesId=date['movies'])
-
+                        date['movies'] = date['movies'] + rmovie
+                        with open("{}/data/bookings.json".format("."), "w") as json_file:
+                            json.dump(db, json_file, indent=3)
                 if created==False:
-
-                    addedbooking = {
-                                    "date": request.date,
-                                    "movies": [movie]
+                    addedbooking = {"date": request.dates,
+                                    "movies": rmovie
                                     }
                     booking['dates'].append(addedbooking)
+                    newcontent = db
+                    with open("{}/data/bookings.json".format("."), "w") as json_file:
+                        json.dump(newcontent, json_file, indent=3)
+                    print(booking['dates'])
                     created = True
-                    for date in booking['dates']:
-                        yield booking_pb2.BookingData(userId=booking['userid'], dates=date['date'],
-                                                      moviesId=date['movies'])
+
         if created==False:
             addedbooking = {
-                            "userid": request.id,
+                            "userid": request.userId,
                             "dates": [
                                         {
-                                            "date": request.date,
-                                            "movies": [movie]
+                                            "date": request.dates,
+                                            "movies": rmovie
                                         }
                                     ]
                             }
-            booking.append(addedbooking)
-            return booking_pb2.BookingData(addedbooking)
+            db['bookings'].append(addedbooking)
+            with open("{}/data/bookings.json".format("."), "w") as json_file:
+                json.dump(db, json_file, indent=3)
+        with open('{}/data/bookings.json'.format("."), "r") as jsf:
+            update = json.load(jsf)["bookings"]
+        for booking in update:
+            if booking['userid'] == request.userId:
+                for user in booking['dates']:
+                    yield booking_pb2.BookingData(userId=booking['userid'], dates=user['date'],
+                                                  moviesId=user['movies'])
+
+        return booking_pb2.BookingData(userId="", dates="", moviesId="")
+
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     booking_pb2_grpc.add_BookingServicer_to_server(BookingServicer(), server)
-    server.add_insecure_port('[::]:3002')
+    server.add_insecure_port('[::]:3001')
     server.start()
     server.wait_for_termination()
 
