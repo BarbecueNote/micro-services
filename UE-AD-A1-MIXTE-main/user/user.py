@@ -82,10 +82,10 @@ def get_user_byid(id):
    return make_response(jsonify({"error": "bad input parameter"}), 400)
 
 @app.route("/users/<userid>", methods=['POST'])
-def add_user(id):
+def add_user(userid):
     req = request.get_json()
     for user in users:
-        if str(user["id"]) == str(id):
+        if str(user["id"]) == str(userid):
             return make_response(jsonify({"error": "User already exists"}), 409)
     users.append(req)
     res = make_response(jsonify(req), 200)
