@@ -33,9 +33,7 @@ class BookingServicer(booking_pb2_grpc.BookingServicer):
         for booking in db['bookings']:
             if booking['userid'] == request.userId:
                 for date in booking['dates']:
-                    print("ooo")
                     for movie in date['movies']:
-                        print("iii")
                         if [movie] == rmovie:
                             created = True
                             print("booking already exists")
