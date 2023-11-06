@@ -81,6 +81,11 @@ def get_user_byid(id):
          return res
    return make_response(jsonify({"error": "bad input parameter"}), 400)
 
+def save_user_data(users_data):
+   users_file_path = "./data/users.json"
+   with open(users_file_path, "w") as file:
+        json.dump({"users": users_data}, file)
+        
 @app.route("/users/<userid>", methods=['POST'])
 def add_user(id):
     req = request.get_json()
@@ -88,6 +93,7 @@ def add_user(id):
         if str(user["id"]) == str(id):
             return make_response(jsonify({"error": "User already exists"}), 409)
     users.append(req)
+    save_user_data(users)
     res = make_response(jsonify(req), 200)
     return res
 
