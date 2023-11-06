@@ -10,8 +10,7 @@ import grpc
 from concurrent import futures
 import booking_pb2
 import booking_pb2_grpc
-import movie_pb2
-import movie_pb2_grpc
+
 '''
 # graphQL
 from ariadne import graphql_sync, make_executable_schema, load_schema_from_path, ObjectType, QueryType, MutationType
