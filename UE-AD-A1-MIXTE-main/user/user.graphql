@@ -1,9 +1,0 @@
-type Query {
-    user_with_id(_id: String!): User
-}
-
-type User {
-    id: String!
-    name: String!
-    last_active: Int!
-}
