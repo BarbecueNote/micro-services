@@ -2,24 +2,26 @@ import json
 
 from graphql import GraphQLError
 
-
-def movie_with_id(_,info,_id):
+# Fonction pour obtenir un film par son ID
+def movie_with_id(_, info, _id):
     with open('{}/data/movies.json'.format("."), "r") as file:
         movies = json.load(file)
         for movie in movies['movies']:
             if movie['id'] == _id:
                 return movie
-        raise GraphQLError("bad input parameter")
+        raise GraphQLError("mauvais paramètre d'entrée")
 
-def movie_with_title(_,info,_title):
+# Fonction pour obtenir un film par son titre
+def movie_with_title(_, info, _title):
     with open('{}/data/movies.json'.format("."), "r") as file:
         movies = json.load(file)
         for movie in movies['movies']:
             if movie['title'] == _title:
                 return movie
-        raise GraphQLError("bad input parameter")
+        raise GraphQLError("mauvais paramètre d'entrée")
 
-def update_movie_rate(_,info,_id,_rate):
+# Fonction pour mettre à jour la note d'un film
+def update_movie_rate(_, info, _id, _rate):
     newmovies = {}
     newmovie = {}
     with open('{}/data/movies.json'.format("."), "r") as rfile:
@@ -33,7 +35,8 @@ def update_movie_rate(_,info,_id,_rate):
         json.dump(newmovies, wfile, indent=4)
     return newmovie
 
-def update_movie_title(_,info,_id,_title):
+# Fonction pour mettre à jour le titre d'un film
+def update_movie_title(_, info, _id, _title):
     newmovies = {}
     newmovie = {}
     with open('{}/data/movies.json'.format("."), "r") as rfile:
@@ -47,14 +50,15 @@ def update_movie_title(_,info,_id,_title):
         json.dump(newmovies, wfile, indent=4)
     return newmovie
 
-def create_movie(_,info,_movie):
+# Fonction pour créer un nouveau film
+def create_movie(_, info, _movie):
     newmovies = {}
     newmovie = {}
     with open('{}/data/movies.json'.format("."), "r") as rfile:
         movies = json.load(rfile)
         for movie in movies['movies']:
             if movie['id'] == _movie['id']:
-                raise GraphQLError("an existing item already exists")
+                raise GraphQLError("un élément existant existe déjà")
         newmovie = _movie
         newmovies = movies
         newmovies["movies"].append(newmovie)
@@ -62,7 +66,8 @@ def create_movie(_,info,_movie):
         json.dump(newmovies, wfile, indent=4)
     return newmovie
 
-def delete_movie(_,info,_id):
+# Fonction pour supprimer un film par son ID
+def delete_movie(_, info, _id):
     newmovies = {}
     newmovie = {}
     with open('{}/data/movies.json'.format("."), "r") as rfile:
@@ -76,6 +81,7 @@ def delete_movie(_,info,_id):
         json.dump(newmovies, wfile, indent=4)
     return newmovie
 
+# Fonction pour obtenir les acteurs dans un film
 def resolve_actors_in_movie(movie, info):
     with open('{}/data/actors.json'.format("."), "r") as file:
         data = json.load(file)
