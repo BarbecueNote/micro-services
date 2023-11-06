@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0eshowtime.proto\"\x19\n\tTimestamp\x12\x0c\n\x04time\x18\x01 \x01(\t\"\x15\n\x07MovieID\x12\n\n\x02id\x18\x01 \x01(\t\"&\n\tSchedules\x12\x0c\n\x04time\x18\x01 \x01(\t\x12\x0b\n\x03ids\x18\x02 \x03(\t\"\x07\n\x05\x45mpty2[\n\x08Showtime\x12*\n\x0eGetMovieByTime\x12\n.Timestamp\x1a\x08.MovieID\"\x00\x30\x01\x12#\n\tShowtimes\x12\x06.Empty\x1a\n.Schedules\"\x00\x30\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0eshowtime.proto\"\x19\n\tTimestamp\x12\x0c\n\x04time\x18\x01 \x01(\t\"\x15\n\x07MovieID\x12\n\n\x02id\x18\x01 \x01(\t\"&\n\tSchedules\x12\x0c\n\x04time\x18\x01 \x01(\t\x12\x0b\n\x03ids\x18\x02 \x03(\t\"\x0e\n\x0c\x45mptyMessage2b\n\x08Showtime\x12*\n\x0eGetMovieByTime\x12\n.Timestamp\x1a\x08.MovieID\"\x00\x30\x01\x12*\n\tShowtimes\x12\r.EmptyMessage\x1a\n.Schedules\"\x00\x30\x01\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -27,8 +27,8 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_MOVIEID']._serialized_end=66
   _globals['_SCHEDULES']._serialized_start=68
   _globals['_SCHEDULES']._serialized_end=106
-  _globals['_EMPTY']._serialized_start=108
-  _globals['_EMPTY']._serialized_end=115
-  _globals['_SHOWTIME']._serialized_start=117
-  _globals['_SHOWTIME']._serialized_end=208
+  _globals['_EMPTYMESSAGE']._serialized_start=108
+  _globals['_EMPTYMESSAGE']._serialized_end=122
+  _globals['_SHOWTIME']._serialized_start=124
+  _globals['_SHOWTIME']._serialized_end=222
 # @@protoc_insertion_point(module_scope)

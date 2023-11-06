@@ -93,7 +93,7 @@ def get_movie_by_time(stub,time):
         print(movie)
 
 def showtimes(stub):
-    movies = stub.Showtimes(showtime_pb2.Empty())
+    movies = stub.Showtimes(showtime_pb2.EmptyMessage())
     for movie in movies:
         print(movie)
 

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 service Showtime {
     rpc GetMovieByTime(Timestamp) returns (stream MovieID) {}
-    rpc Showtimes(Empty) returns (stream Schedules) {}
+    rpc Showtimes(EmptyMessage) returns (stream Schedules) {}
 }
 
 message Timestamp {
@@ -18,6 +18,6 @@ message Schedules {
     repeated string ids = 2;
 }
 
-message Empty {
+message EmptyMessage {
 
 }
