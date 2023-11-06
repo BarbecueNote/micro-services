@@ -98,8 +98,6 @@ def get_reservations_movies_byid(id):
             for movies in date['movies']:
                movie = requests.get("http://" + request.host.split(':')[0] + ":3200/movies/"+movies).json()
                films.append(movie)
-               with open("{}/data/users.json".format("."), "w") as json_file:
-                   json.dump(films, json_file, indent=3)
          res = make_response(jsonify(films),200)
          return res
    return make_response(jsonify({"error": "bad input parameter"}), 400)
