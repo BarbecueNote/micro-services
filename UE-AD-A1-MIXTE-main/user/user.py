@@ -85,11 +85,6 @@ def get_user_byid(id):
          return res
    return make_response(jsonify({"error": "mauvais paramètre d'entrée"}), 400)
 
-# Fonction pour sauvegarder les données utilisateur
-def save_user_data(users_data):
-   users_file_path = "./data/users.json"
-   with open(users_file_path, "w") as file:
-        json.dump({"users": users_data}, file)
         
 # Route pour ajouter un utilisateur
 @app.route("/users/<userid>", methods=['POST'])
@@ -97,10 +92,11 @@ def add_user(userid):
     req = request.get_json()
     for user in users:
 
-        if str(user["id"]) == str(id):
+        if str(user["id"]) == str(userid):
             return make_response(jsonify({"error": "L'utilisateur existe déjà"}), 409)
     users.append(req)
-    save_user_data(users)
+    with open('{}/data/users.json'.format("."), "w") as json_file:
+        json.dump(users, json_file, indent=3)
     res = make_response(jsonify(req), 200)
     return res
 
