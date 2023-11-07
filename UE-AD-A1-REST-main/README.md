@@ -1,4 +1,4 @@
-# TP MIXTE
+# TP REST
 
 Ce dépôt contient une collection de microservices pour la gestion d'un système de réservation de films. Chaque service est conçu pour gérer une partie spécifique du système, assurant une architecture modulaire et évolutive.
 

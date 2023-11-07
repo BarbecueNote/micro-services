@@ -34,6 +34,7 @@ class BookingServicer(booking_pb2_grpc.BookingServicer):
             db = json.load(jsf)
         created=False
         rmovie = list(request.moviesId)
+
         for booking in db['bookings']:
             if booking['userid'] == request.userId:
                 for date in booking['dates']:
@@ -41,12 +42,13 @@ class BookingServicer(booking_pb2_grpc.BookingServicer):
                         if [movie] == rmovie:
                             created = True
                             print("booking already exists")
+                    #création du booking pour la bonne personne, à la bonne date
                     if date['date'] == request.dates and created==False:
                         created=True
                         date['movies'] = date['movies'] + rmovie
                         with open("{}/data/bookings.json".format("."), "w") as json_file:
                             json.dump(db, json_file, indent=3)
-
+                #création du booking à la bonne personne, et ajout d'une nouvelle date
                 if created==False:
                     addedbooking = {"date": request.dates,
                                     "movies": rmovie
@@ -58,6 +60,7 @@ class BookingServicer(booking_pb2_grpc.BookingServicer):
                     print(booking['dates'])
                     created = True
 
+        #création d'une nouvelle personne et de son booking
         if created==False:
             addedbooking = {
                             "userid": request.userId,

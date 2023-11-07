@@ -14,4 +14,4 @@ Permet d'afficher la liste de tous les films avec leur jour de projection et de 
 
 ## _Service user_
 
-Permet
+Permet d'ajouter un utilisateur, ainsi que de consulter la liste des utilisateurs et leurs réservations
