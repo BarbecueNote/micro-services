@@ -36,10 +36,10 @@ def run():
         stub = booking_pb2_grpc.BookingStub(channel)
 
         print("-------------- GetListBookings --------------")
-        #get_list_bookings(stub)
+        get_list_bookings(stub)
         print("-------------- GetBookingsByUserId --------------")
-        #userid="garret_heaton"
-        #get_bookings_by_userid(stub, userid)
+        userid="garret_heaton"
+        get_bookings_by_userid(stub, userid)
         print("-------------- AddBooking --------------")
         """request = booking_pb2.BookingData(
             userId="chris_rivers",
@@ -85,47 +85,21 @@ def get_user_byid(id):
          return res
    return make_response(jsonify({"error": "mauvais paramètre d'entrée"}), 400)
 
-# Fonction pour sauvegarder les données utilisateur
-def save_user_data(users_data):
-   users_file_path = "./data/users.json"
-   with open(users_file_path, "w") as file:
-        json.dump({"users": users_data}, file)
         
 # Route pour ajouter un utilisateur
 @app.route("/users/<userid>", methods=['POST'])
-def add_user(id):
+def add_user(userid):
     req = request.get_json()
     for user in users:
-        if str(user["id"]) == str(id):
+
+        if str(user["id"]) == str(userid):
             return make_response(jsonify({"error": "L'utilisateur existe déjà"}), 409)
     users.append(req)
-    save_user_data(users)
+    with open('{}/data/users.json'.format("."), "w") as json_file:
+        json.dump(users, json_file, indent=3)
     res = make_response(jsonify(req), 200)
     return res
 
-# Route pour obtenir les réservations par ID utilisateur
-@app.route("/users/<id>/reservations", methods=['GET'])
-def get_reservations_byid(id):
-   for user in users:
-      if user["id"] == str(id):
-         res = make_response(jsonify(requests.get("http://" + request.host.split(':')[0] + ":3201/bookings/"+id).json()),200)
-         return res
-   return make_response(jsonify({"error": "mauvais paramètre d'entrée"}), 400)
-
-# Route pour obtenir les films réservés par ID utilisateur
-@app.route("/users/<id>/reservations/movies", methods=['GET'])
-def get_reservations_movies_byid(id):
-   for user in users:
-      if user["id"] == str(id):
-         reservations = requests.get("http://" + request.host.split(':')[0] + ":3201/bookings/"+id).json()
-         films= []
-         for date in reservations["dates"]:
-            for movies in date['movies']:
-               movie = requests.get("http://" + request.host.split(':')[0] + ":3200/movies/"+movies).json()
-               films.append(movie)
-         res = make_response(jsonify(films),200)
-         return res
-   return make_response(jsonify({"error": "mauvais paramètre d'entrée"}), 400)
 
 @app.route("/movies", methods=['GET'])
 def get_movies():
