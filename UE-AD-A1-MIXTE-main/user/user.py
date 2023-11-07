@@ -127,6 +127,21 @@ def get_reservations_movies_byid(id):
          return res
    return make_response(jsonify({"error": "mauvais paramètre d'entrée"}), 400)
 
+@app.route("/movies", methods=['GET'])
+def get_movies():
+    query = """
+query Get_all_movies {
+    get_all_movies {
+        id
+        title
+        director
+        rating
+    }
+}
+    """
+    response = requests.post("http://localhost:3100/graphql", json={'query':  query})
+    return make_response(response.json(), response.status_code)
+
 if __name__ == "__main__":
    print("Serveur en cours d'exécution sur le port %s"%(PORT))
    app.run(host=HOST, port=PORT)
