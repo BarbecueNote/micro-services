@@ -101,6 +101,21 @@ def add_user(userid):
     return res
 
 
+@app.route("/movies", methods=['GET'])
+def get_movies():
+    query = """
+query Get_all_movies {
+    get_all_movies {
+        id
+        title
+        director
+        rating
+    }
+}
+    """
+    response = requests.post("http://localhost:3100/graphql", json={'query':  query})
+    return make_response(response.json(), response.status_code)
+
 if __name__ == "__main__":
    print("Serveur en cours d'exécution sur le port %s"%(PORT))
    app.run(host=HOST, port=PORT)
