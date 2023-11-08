@@ -41,11 +41,11 @@ def run():
         userid="garret_heaton"
         get_bookings_by_userid(stub, userid)
         print("-------------- AddBooking --------------")
-        """request = booking_pb2.BookingData(
+        request = booking_pb2.BookingData(
             userId="chris_rivers",
             moviesId=["7daf7208-be4d-4944-a3ae-c1c2f516f3e6"],
             dates="20151201"
-        )"""
+        )
         request = booking_pb2.BookingData(
             userId="jim_halpert",
             moviesId=["7daf7208-be4d-4944-a3ae-c1c2f516f3e6"],
