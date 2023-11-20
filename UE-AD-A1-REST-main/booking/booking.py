@@ -36,6 +36,7 @@ def add_booking_byuser(userid):
     for time in times:
         if str(time["date"]) == str(req["date"]):
             valid_date = True
+            #on vérifie si le film existe
             if not all(item in time["movies"] for item in req["movies"]):
                 return make_response(jsonify({"error": "bad input parameter"}), 400)
     if not valid_date:
