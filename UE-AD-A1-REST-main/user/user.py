@@ -33,13 +33,25 @@ def get_user_byid(id):
    return make_response(jsonify({"error": "mauvais paramètre d'entrée"}), 400)
 
 # Route pour obtenir les réservations d'un utilisateur par son ID
-@app.route("/users/<id>/reservations", methods=['GET'])
+@app.route('/users/<id>/reservations', methods=['GET'])
 def get_reservations_byid(id):
-   for user in users:
-      if user["id"] == str(id):
-         res = make_response(jsonify(requests.get("http://" + request.host.split(':')[0] + ":3201/bookings/"+id).json()), 200)
-         return res
-   return make_response(jsonify({"error": "mauvais paramètre d'entrée"}), 400)
+    """This function gets the user's reservations by their ID."""
+    # Search for the user with the provided 'id'.
+    for user in users:
+        if user["id"] == id:
+            # Make a request to the booking service to get reservations for the user.
+            response = requests.get(f"http://{request.host.split(':')[0]}:3201/bookings/{id}")
+            if response.status_code == 200:
+                # If reservations are found, merge user and reservation data.
+                merged_dict = {**user, "reservations": response.json()}
+                return make_response(jsonify(merged_dict), 200)
+            else:
+                # If no reservations are found, return an error response.
+                return make_response(jsonify({"error": "Booking information not found"}), 400)
+
+    # If the user with the provided 'id' is not found, return an error response.
+    return make_response(jsonify({"error": "User not found"}), 400)
+
 
 # Route pour obtenir les films réservés par un utilisateur par son ID
 @app.route("/users/<id>/reservations/movies", methods=['GET'])
